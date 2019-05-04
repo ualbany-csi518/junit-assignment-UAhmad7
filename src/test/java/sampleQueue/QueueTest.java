@@ -1,11 +1,6 @@
 package sampleQueue;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.NoSuchElementException;
 
@@ -47,69 +42,30 @@ class QueueTest
         assertTrue(q.isEmpty());
     }
 
-    @Test
-    @DisplayName("Verify Item is added when queue isEmpty")
-    void isItemAddedWhenQueueIsEmpty()
+    @Nested
+    @DisplayName("IsEmpty Test")
+    class IsEmpty
     {
-        q.enqueue("Hello");
-        assertFalse(q.isEmpty());
+        @Test
+        @DisplayName("Verify isEmpty returns true when no item in queue")
+        void verifyIsEmptyTrueWhenQueueIsEmpty()
+        {
+            q.enqueue("Hello");
+            q.dequeue();
+            assertTrue(q.isEmpty());
+        }
+
+        @Test
+        @DisplayName("Verify isEmpty returns false when queue has at least one item")
+        void verifyIsEmptyFalseWhenQueueHasItem()
+        {
+            q.enqueue("Hello");
+            assertFalse(q.isEmpty());
+        }
     }
 
     @Test
-    @DisplayName("Verify Item is added when queue is not empty")
-    void isItemAddedWhenQueueIsNotEmpty()
-    {
-        q.enqueue("Hello");
-        q.enqueue("World");
-        assertEquals(q.size(), 2);
-    }
-
-    @Test
-    @DisplayName("Verify Item does not get added when queue is at maxLength")
-    void isItemNotAddedWhenQueueIsAtMaxLength()
-    {
-        q = new Queue<>(2);
-        q.enqueue("Hello");
-        q.enqueue("World");
-        q.enqueue("Don't add this");
-        assertTrue(q.size() <= 2);
-    }
-
-    @Test
-    @DisplayName("Verify Dequeue throws an exception when Queue isEmpty")
-    void verifyDequeueThrowsExcceptionWhenQueueIsEmpty()
-    {
-        assertThrows(NoSuchElementException.class, () -> q.dequeue());
-    }
-
-    @Test
-    @DisplayName("Verify Dequeue removes first Item when Queue is not empty")
-    void verifyDequeueRemovesFirstItemWhenQueueIsNotEmpty()
-    {
-        q.enqueue("Hello");
-        q.enqueue("World");
-        assertEquals(q.dequeue(), "Hello");
-        assertEquals(q.size(), 1);
-    }
-
-    @Test
-    @DisplayName("Verify peek throws an exception when Queue isEmpty")
-    void verifyPeekThrowsExcceptionWhenQueueIsEmpty()
-    {
-        assertThrows(NoSuchElementException.class, () -> q.peek());
-    }
-
-    @Test
-    @DisplayName("Verify peek returns first Item when Queue is not empty")
-    void verifyPeekReturnsFirstItemWhenQueueIsNotEmpty()
-    {
-        q.enqueue("Hello");
-        q.enqueue("World");
-        assertEquals(q.peek(), "Hello");
-    }
-
-    @Test
-    @DisplayName("Verify length returns the correct Item count")
+    @DisplayName("Verify length returns the correct item count")
     void verifyLengthReturnsCorrectItemCount()
     {
         q.enqueue("Hello");
@@ -119,28 +75,85 @@ class QueueTest
         assertEquals(q.length(), 2);
     }
 
-    @Test
-    @DisplayName("Verify isEmpty is true when no Item in Queue")
-    void verifyIsEmptyTrueWhenQueueIsEmpty()
+    @Nested
+    @DisplayName("Peek test")
+    class Peek
     {
-        q.enqueue("Hello");
-        q.enqueue("World");
-        q.dequeue();
-        q.dequeue();
-        assertTrue(q.isEmpty());
+        @Test
+        @DisplayName("Verify peek throws an exception when Queue isEmpty")
+        void verifyPeekThrowsExcceptionWhenQueueIsEmpty()
+        {
+            assertThrows(NoSuchElementException.class, () -> q.peek());
+        }
+
+        @Test
+        @DisplayName("Verify peek returns first Item when Queue is not empty")
+        void verifyPeekReturnsFirstItemWhenQueueIsNotEmpty()
+        {
+            q.enqueue("Hello");
+            q.enqueue("World");
+            assertEquals(q.peek(), "Hello");
+        }
+    }
+
+    @Nested
+    @DisplayName("Enqueue Test")
+    class Enqueue
+    {
+        @Test
+        @DisplayName("Verify item is added when queue is empty")
+        void verifyItemAddedWhenQueueIsEmpty()
+        {
+            q.enqueue("Hello");
+            assertFalse(q.isEmpty());
+        }
+
+        @Test
+        @DisplayName("Verify item is added when queue is not empty")
+        void verifyItemAddedWhenQueueIsNotEmpty()
+        {
+            q.enqueue("Hello");
+            q.enqueue("World");
+            assertEquals(q.size(), 2);
+        }
+
+        @Test
+        @DisplayName("Verify item is not added when queue is at max length")
+        void verifyItemNotAddedWhenQueueIsAtMaxLength()
+        {
+            q = new Queue<>(2);
+            q.enqueue("Hello");
+            q.enqueue("World");
+            q.enqueue("Don't add this");
+            assertTrue(q.size() <= 2);
+        }
+    }
+
+    @Nested
+    @DisplayName("Dequeue Test")
+    class Dequeue
+    {
+        @Test
+        @DisplayName("Verify dequeue throws an exception when queue is empty")
+        void verifyDequeueThrowsExcceptionWhenQueueIsEmpty()
+        {
+            assertThrows(NoSuchElementException.class, () -> q.dequeue());
+        }
+
+        @Test
+        @DisplayName("Verify dequeue removes first item when queue is not empty")
+        void verifyDequeueRemovesFirstItemWhenQueueIsNotEmpty()
+        {
+            q.enqueue("Hello");
+            q.enqueue("World");
+            assertEquals(q.dequeue(), "Hello");
+            assertEquals(q.size(), 1);
+        }
     }
 
     @Test
-    @DisplayName("Verify isEmpty is false when Queue has at least one Item")
-    void verifyIsEmptyFalseWhenQueueHasItem()
-    {
-        q.enqueue("Hello");
-        assertFalse(q.isEmpty());
-    }
-
-    @Test
-    @DisplayName("Verify removeAll removes all Items from Queue")
-    void verifyRemoveAllRemovesAllItemsFromQueue()
+    @DisplayName("Verify removeAll makes the queue empty")
+    void verifyRemoveAllMakesQueueEmpty()
     {
         q.enqueue("Hello");
         q.enqueue("World");
@@ -149,7 +162,7 @@ class QueueTest
         assertTrue(q.isEmpty());
     }
 
-	//Example of Wrong Test! 
+	//Example of Wrong Test!
 	@Test
 	@Disabled
 	@DisplayName("Verify Queue isEmpty returns false when queue is not empty")
