@@ -16,31 +16,41 @@ class QueueTest
 	private static final String SOME_ITEM = "some-content";
 	private Queue<String> q;
 
-	@Test
-	@Disabled
-	@DisplayName("is instantiated with new Queue()")
-	void isInstantiatedWithNew() {
-		new Queue<>();
-	}
+	@Nested
+    @DisplayName("Constructors test")
+    class Constructors
+    {
+        @Test
+        @DisplayName("is instantiated with new Queue()")
+        void isInstantiatedWithNew() {
+            new Queue<>();
+        }
+
+        @Test
+        @DisplayName("Verify Queue isEmpty returns true when queue is initialized")
+        void isEmptyShouldGiveTrueOnQueueInit() {
+            assertTrue(q.isEmpty());
+        }
+
+        @Test
+        @DisplayName("is instantiated with new Queue(maxLength)")
+        void isInstantiatedWithNewWithMaxLength() {
+            new Queue<>(5);
+        }
+
+        @Test
+        @DisplayName("Verify Queue isEmpty returns true queue is initialized with maxLength")
+        void isEmptyShouldGiveTrueOnQueueInitWithMaxLength()
+        {
+            q = new Queue<>(5);
+            assertTrue(q.isEmpty());
+        }
+    }
 
 	@BeforeEach
 	void init() {
 		this.q = new Queue<String>();
 	}
-
-	@Test
-	@DisplayName("Verify Queue isEmpty when queue is initialized")
-	void isEmptyShouldGiveTrueOnQueueInit() {
-		assertTrue(q.isEmpty());
-	}
-
-    @Test
-    @DisplayName("Verify Queue isEmpty when queue is initialized with maxLength")
-    void isEmptyShouldGiveTrueOnQueueInitWithMaxLength()
-    {
-        q = new Queue<>(5);
-        assertTrue(q.isEmpty());
-    }
 
     @Nested
     @DisplayName("IsEmpty Test")
@@ -57,7 +67,7 @@ class QueueTest
 
         @Test
         @DisplayName("Verify isEmpty returns false when queue has at least one item")
-        void verifyIsEmptyFalseWhenQueueHasItem()
+        void verifyIsEmptyReturnsFalseWhenQueueHasItem()
         {
             q.enqueue("Hello");
             assertFalse(q.isEmpty());
@@ -105,7 +115,7 @@ class QueueTest
         void verifyItemAddedWhenQueueIsEmpty()
         {
             q.enqueue("Hello");
-            assertFalse(q.isEmpty());
+            assertEquals(q.peek(), "Hello");
         }
 
         @Test
@@ -114,7 +124,7 @@ class QueueTest
         {
             q.enqueue("Hello");
             q.enqueue("World");
-            assertEquals(q.size(), 2);
+            assertEquals(q.peek(), "Hello");
         }
 
         @Test
@@ -161,13 +171,4 @@ class QueueTest
         q.removeAll();
         assertTrue(q.isEmpty());
     }
-
-	//Example of Wrong Test!
-	@Test
-	@Disabled
-	@DisplayName("Verify Queue isEmpty returns false when queue is not empty")
-	void isEmptyShouldGiveFalseWhenQueueIsNotEmpty() {
-		this.q.enqueue(SOME_ITEM);
-		assertFalse(q.isEmpty());
-	}
 }
